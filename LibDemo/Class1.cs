@@ -1,7 +1,15 @@
 ﻿namespace LibDemo
 {
-    public class Class1
+    public class LibClass
     {
-
+        private string _message;
+        public LibClass(string message) 
+        {
+            _message = message;
+        }
+        public string GetMessage()
+        {
+            return $"{_message} from library";
+        }
     }
 }
