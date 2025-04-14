@@ -30,20 +30,20 @@ jobs:
         run: dotnet build "${{github.workspace}}/LibDemo.sln"  --no-restore --configuration Release
 
       - name: Publish
-        run: dotnet publish "${{github.workspace}}/LibDemo/LibDemo.csproj" -c Release -o mywebapp
+        run: dotnet publish "${{github.workspace}}/LibDemo/LibDemo.csproj" -c Release -o libdemo
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: "${{github.event.repository.name}}-DEV"
-          path: mywebapp/**
+          path: libdemo/**
           if-no-files-found: error
 
       - name: Publish NuGet Package
         env: 
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: dotnet nuget push "LibDemo/bin/Release/*.nupkg" --source "https://nuget.pkg.github.com/JTTesting/index.json"
-          
+
       - name: Dump GitHub context2
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
