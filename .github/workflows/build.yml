@@ -32,13 +32,6 @@ jobs:
       - name: Publish
         run: dotnet publish "${{github.workspace}}/LibDemo/LibDemo.csproj" -c Release -o libdemo
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "${{github.event.repository.name}}-DEV"
-          path: libdemo/**
-          if-no-files-found: error
-          
       - name: Dump GitHub context2
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
