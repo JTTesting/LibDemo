@@ -42,7 +42,7 @@ jobs:
       - name: Publish NuGet Package
         env: 
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget push "libdemo/bin/Release/*.nupkg" --source "https://nuget.pkg.github.com/JTTesting/index.json"
+        run: dotnet nuget push "${{github.workspace}}/LibDemo/bin/Release/*.nupkg" --source "https://nuget.pkg.github.com/JTTesting/index.json"
 
       - name: Dump GitHub context2
         env:
