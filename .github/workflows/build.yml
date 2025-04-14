@@ -32,6 +32,19 @@ jobs:
       - name: Publish
         run: dotnet publish "${{github.workspace}}/LibDemo/LibDemo.csproj" -c Release -o libdemo
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{github.event.repository.name}}-DEV"
+          path: libdemo/**
+          if-no-files-found: error
+
+      - name: Publish NuGet Package
+        env: 
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget add source --username JamesonTM --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/JTTesting/index.json"
+        
+
       - name: Dump GitHub context2
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
