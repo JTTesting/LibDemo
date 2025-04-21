@@ -21,12 +21,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+        if: always()
 
       - name: Extract Version from .csproj
         id: extract_version
         run: |
           # Replace 'YourProject.csproj' with the actual .csproj filename
-          $csprojPath = "\${{github.event.repository.name}}.csproj"
+          $csprojPath = ".\${{github.event.repository.name}}.csproj"
           [xml]$csproj = Get-Content $csprojPath
           $version = $csproj.Project.PropertyGroup.Version
           echo "Version: $version"
