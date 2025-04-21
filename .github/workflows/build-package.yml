@@ -28,6 +28,16 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
         if: always()
 
+      - name: Check file location
+        run: |
+          $csprojPath = ".\${{github.event.repository.name}}.csproj"
+          cd $csprojPath
+          dir
+          cd ..
+          dir
+          cd ..
+          dir
+
       - name: Extract Version from .csproj
         id: extract_version
         run: |
