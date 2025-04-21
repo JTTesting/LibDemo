@@ -30,7 +30,7 @@ jobs:
 
       - name: Check file location
         run: |
-          $csprojPath = "D:\a\LibDemo\LibDemo"
+          $csprojPath = "D:\a\LibDemo\LibDemo\LibDemo\LibDemo"
           cd $csprojPath
           dir
           cd ..
@@ -42,7 +42,7 @@ jobs:
         id: extract_version
         run: |
           # Replace 'YourProject.csproj' with the actual .csproj filename
-          $csprojPath = ".\${{github.event.repository.name}}.csproj"
+          $csprojPath = ".\${{github.event.repository.name}}\${{github.event.repository.name}}.csproj"
           [xml]$csproj = Get-Content $csprojPath
           $version = $csproj.Project.PropertyGroup.Version
           echo "Version: $version"
