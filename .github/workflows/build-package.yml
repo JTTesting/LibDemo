@@ -30,7 +30,7 @@ jobs:
 
       - name: Check file location
         run: |
-          $csprojPath = ".\${{github.event.repository.name}}.csproj"
+          $csprojPath = "D:\a\LibDemo\LibDemo"
           cd $csprojPath
           dir
           cd ..
