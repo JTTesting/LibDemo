@@ -21,6 +21,32 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+        if: always()
+
+      - name: Check file location
+        run: |
+          $csprojPath = "D:\a\LibDemo\LibDemo\LibDemo"
+          cd $csprojPath
+          dir
+          cd ..
+          dir
+          cd ..
+          dir
+
+      - name: Extract Version from .csproj
+        id: extract_version
+        run: |
+          # Replace 'YourProject.csproj' with the actual .csproj filename
+          $csprojPath = ".\${{github.event.repository.name}}\${{github.event.repository.name}}.csproj"
+          [xml]$csproj = Get-Content $csprojPath
+          $version = $csproj.Project.PropertyGroup.Version
+          echo "Version: $version"
+          echo "VERSION=$version" >> $env:GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4.1.0
@@ -46,10 +72,10 @@ jobs:
       - name: NuGet Login
         env: 
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget add source --username JamesonTM --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/JTTesting/index.json"
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/JTTesting/index.json"
       
       - name: Publish NuGet Package
-        run: dotnet nuget push "${{github.workspace}}/LibDemo/bin/Release/LibDemo.1.0.2.nupkg" --source "github"
+        run: dotnet nuget push "${{github.workspace}}/LibDemo/bin/Release/LibDemo.$env:VERSION.nupkg" --source "github"
 
       - name: Dump GitHub context2
         env:
