@@ -30,7 +30,7 @@ jobs:
 
       - name: Check file location
         run: |
-          $csprojPath = "D:\a\LibDemo\LibDemo\LibDemo\LibDemo"
+          $csprojPath = "D:\a\LibDemo\LibDemo\LibDemo"
           cd $csprojPath
           dir
           cd ..
