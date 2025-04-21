@@ -26,7 +26,7 @@ jobs:
         id: extract_version
         run: |
           # Replace 'YourProject.csproj' with the actual .csproj filename
-          $csprojPath = ".\${{github.repository.name}}.csproj"
+          $csprojPath = ".\${{github.event.repository.name}}.csproj"
           [xml]$csproj = Get-Content $csprojPath
           $version = $csproj.Project.PropertyGroup.Version
           echo "Version: $version"
