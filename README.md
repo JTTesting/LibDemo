@@ -1,4 +1,4 @@
-# Please update the version number for each merge to main
+# Please update the version number for each merge to main, this will be the package version
 ```xml
 csproj file
 <Version>1.0.5</Version>
