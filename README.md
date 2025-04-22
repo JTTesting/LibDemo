@@ -9,7 +9,7 @@ To test locally with local library builds, use the following steps:
    <PackageReference Include="LibDemo" Version="1.0.5"/>
   
   with
-  
+  ```xml
       <Reference Include="LibDemo">
         <HintPath>..\..\Path\to\Library\LibDemo.dll</HintPath>
       </Reference>
