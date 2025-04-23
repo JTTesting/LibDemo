@@ -51,10 +51,17 @@ jobs:
       - name: Query NuGet API
         shell: powershell
         run: |
-          $PACKAGE_NAME = "${{github.event.repository.name}}"
-          $VERSION_TO_CHECK = "$env:GITHUB_ENV"
-          $RESPONSE = Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$PACKAGE_NAME/index.json"
-          if ($RESPONSE.versions -contains $VERSION_TO_CHECK) {
+          $OWNER = "${{github.repository_owner}}" # Replace with your GitHub username or organization
+          $REPO = "${{github.event.repository.name}}" # Replace with your repository name
+          $VERSION_TO_CHECK = "$env:GITHUB_ENV" # Replace with your package name
+          $TOKEN = "${{ secrets.GITHUB_TOKEN }}" # Use GitHub token
+          $API_URL = "https://api.github.com/repos/$OWNER/$REPO/packages/container/$REPO/versions"
+          $response = Invoke-RestMethod -Uri $API_URL -Headers @{
+            Authorization = "token $TOKEN"
+            Accept = "application/vnd.github.v3+json"
+          }
+          $response | ForEach-Object { Write-Host "Version: $($_.metadata.container.tags)" }
+          if ($response.versions -contains $VERSION_TO_CHECK) {
             Write-Host "Version $VERSION_TO_CHECK already exists for $PACKAGE_NAME."
             exit 1
           } else {
