@@ -131,7 +131,7 @@ jobs:
           uses: actions/download-artifact@v4.2.1
           with:
             name: "${{github.event.repository.name}}"
-            path: libdemo
+            path: libdemo/
             if-no-files-found: error          
             
         - name: Dump GitHub context2
@@ -139,6 +139,9 @@ jobs:
             GITHUB_CONTEXT: ${{ toJSON(github) }}
           run: echo "$GITHUB_CONTEXT"
           if: always()
+
+        - name: List workspace contents
+          run: ls -R
   
         - name: NuGet Login
           env: 
