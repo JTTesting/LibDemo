@@ -48,6 +48,19 @@ jobs:
           echo "Version: $version"
           echo "VERSION=$version" >> $env:GITHUB_ENV
 
+      - name: Query NuGet API
+        shell: powershell
+        run: |
+          $PACKAGE_NAME = "${{github.event.repository.name}}"
+          $VERSION_TO_CHECK = "$env:GITHUB_ENV"
+          $RESPONSE = Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$PACKAGE_NAME/index.json"
+          if ($RESPONSE.versions -contains $VERSION_TO_CHECK) {
+            Write-Host "Version $VERSION_TO_CHECK already exists for $PACKAGE_NAME."
+            exit 1
+          } else {
+            Write-Host "Version $VERSION_TO_CHECK is available for publishing."
+          }
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4.1.0
         with:
