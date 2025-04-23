@@ -133,7 +133,17 @@ jobs:
             name: "${{github.event.repository.name}}"
             path: libdemo/
             if-no-files-found: error          
-            
+
+        - name: Extract Version from .csproj
+          id: extract_version
+          run: |
+            # Replace 'YourProject.csproj' with the actual .csproj filename
+            $csprojPath = ".\${{github.event.repository.name}}\${{github.event.repository.name}}.csproj"
+            [xml]$csproj = Get-Content $csprojPath
+            $version = $csproj.Project.PropertyGroup.Version
+            echo "Version: $version"
+            echo "VERSION=$version" >> $env:GITHUB_ENV
+              
         - name: Dump GitHub context2
           env:
             GITHUB_CONTEXT: ${{ toJSON(github) }}
