@@ -48,6 +48,26 @@ jobs:
           echo "Version: $version"
           echo "VERSION=$version" >> $env:GITHUB_ENV
 
+      - name: Query NuGet API
+        shell: powershell
+        run: |
+          $OWNER = "${{github.repository_owner}}" # Replace with your GitHub username or organization
+          $REPO = "${{github.event.repository.name}}" # Replace with your repository name
+          $VERSION_TO_CHECK = "$env:GITHUB_ENV" # Replace with your package name
+          $TOKEN = "${{ secrets.GITHUB_TOKEN }}" # Use GitHub token
+          $API_URL = "https://api.github.com/orgs/$OWNER/packages/nuget/$REPO/versions"
+          $response = Invoke-RestMethod -Uri $API_URL -Headers @{
+            Authorization = "token $TOKEN"
+            Accept = "application/vnd.github.v3+json"
+          }
+          $response | ForEach-Object { Write-Host "Version: $($_.name)" }
+          if ($response.name -contains $VERSION_TO_CHECK) {
+            Write-Host "Version $VERSION_TO_CHECK already exists for $PACKAGE_NAME."
+            exit 1
+          } else {
+            Write-Host "Version $VERSION_TO_CHECK is available for publishing."
+          }
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4.1.0
         with:
