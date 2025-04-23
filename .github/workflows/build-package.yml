@@ -69,6 +69,13 @@ jobs:
           path: libdemo/**
           if-no-files-found: error
 
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4.2.1
+        with:
+          name: "${{github.event.repository.name}}"
+          path: libdemo
+          if-no-files-found: error
+
   pause-for-approval:
     needs: build
     runs-on: windows-2019
@@ -124,7 +131,7 @@ jobs:
           uses: actions/download-artifact@v4.2.1
           with:
             name: "${{github.event.repository.name}}"
-            path: libdemo/
+            path: libdemo
             if-no-files-found: error          
             
         - name: Dump GitHub context2
@@ -141,8 +148,4 @@ jobs:
         - name: Publish NuGet Package
           run: dotnet nuget push "${{github.workspace}}/LibDemo/bin/Release/LibDemo.$env:VERSION.nupkg" --source "github"
   
-        - name: Dump GitHub context2
-          env:
-            GITHUB_CONTEXT: ${{ toJSON(github) }}
-          run: echo "$GITHUB_CONTEXT"
-          if: always()
+
