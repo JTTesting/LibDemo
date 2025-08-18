@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Dump GitHub context
         env:
@@ -139,7 +139,7 @@ jobs:
       
       steps:
         - name: Checkout code
-          uses: actions/checkout@v4
+          uses: actions/checkout@v5
   
         - name: Restore cache for build
           uses: actions/cache@v3
